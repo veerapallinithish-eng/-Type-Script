@@ -1,0 +1,44 @@
+ TypeScript Expense Tracker – Write-
+
+
+
+ 1. What is the difference between an interface and a type in TypeScript? When do you use each?
+
+An interface is used to define the structure of an object, such as which properties it should have and their types. A type can also define object structures, but it can additionally define union types and other custom types.
+
+In my Expense Tracker project, I use interfaces to define the structure of an expense and component props. I use types when I need to restrict values to specific options, such as expense categories or filter types.
+
+### 2. What does the `?` symbol mean in an interface property? Give an example from your code.
+
+The `?` symbol means that a property is optional. The user does not have to provide that property every time.
+
+For example, in my `Expense` interface, the `note` property is optional. I can add an expense with a note or without one.
+
+```ts
+interface Expense {
+  id: number;
+  title: string;
+  amount: number;
+  category: Category;
+  date: string;
+  note?: string;
+}
+```
+
+
+ 3. What is a generic in TypeScript? Explain `useLocalStorage<T>` in your own words.
+
+A generic allows us to write reusable code that works with different data types. In `useLocalStorage<T>`, the `<T>` represents the type of data that the hook will store.
+
+For example, I use `useLocalStorage<Expense[]>('expenses', [])` to store my expenses. Here, TypeScript understands that the stored value is an array of expenses. The same hook can also be used for strings, numbers, or other types without rewriting the hook.
+
+
+
+
+ 4. Give one real example where TypeScript caught an error that JavaScript would have missed.
+
+In my Expense Tracker, the `expense.id` property is a number, and the `onDelete` function expects a number.
+
+When I temporarily changed the function parameter to a string, TypeScript showed an error at `onDelete(expense.id)` because a number was being passed where a string was expected.
+
+JavaScript would not normally catch this type mismatch before running the code. TypeScript helped me identify the mistake while coding, before it could cause a problem at runtime.
