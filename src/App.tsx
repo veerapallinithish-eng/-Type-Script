@@ -11,6 +11,7 @@ import useToast from './hooks/useToast'
 import type { Category, Expense, ExpenseInput, FilterType, SortType } from './types'
 import { downloadExpensesCsv } from './utils/exportCsv'
 import { toISODate } from './utils/date'
+import { filterExpenses } from './utils/expenses'
 
 export default function App() {
   const [expenses, setExpenses] = useLocalStorage<Expense[]>('edabip-expenses', [])
@@ -25,11 +26,6 @@ export default function App() {
   const today = toISODate(new Date())
   const currentDate = new Date()
   const firstOfMonth = toISODate(new Date(currentDate.getFullYear(), currentDate.getMonth(), 1))
-  const weekStart = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate())
-  const daysSinceMonday = (weekStart.getDay() + 6) % 7
-  weekStart.setDate(weekStart.getDate() - daysSinceMonday)
-  const firstOfWeek = toISODate(weekStart)
-
   const monthExpenses = expenses.filter((expense) => expense.date >= firstOfMonth && expense.date <= today)
   const total = monthExpenses.reduce((sum, expense) => sum + expense.amount, 0)
   const highest = monthExpenses.reduce((max, expense) => Math.max(max, expense.amount), 0)
@@ -39,9 +35,7 @@ export default function App() {
   }, {})
   const topCategory = Object.entries(categoryCounts).sort((left, right) => (right[1] ?? 0) - (left[1] ?? 0))[0]?.[0] ?? '—'
 
-  const visibleExpenses = expenses
-    .filter((expense) => category === 'all' || expense.category === category)
-    .filter((expense) => period === 'all' || (period === 'week' ? expense.date >= firstOfWeek && expense.date <= today : expense.date >= firstOfMonth && expense.date <= today))
+  const visibleExpenses = filterExpenses(expenses, category, period)
     .filter((expense) => `${expense.title} ${expense.category} ${expense.note ?? ''}`.toLowerCase().includes(search.trim().toLowerCase()))
     .sort((left, right) => {
       if (sort === 'amount') return right.amount - left.amount

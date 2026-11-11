@@ -39,6 +39,13 @@ export default function ExpenseForm({ initialExpense, onSubmit, onCancel }: Expe
       note: values.note.trim(),
     }
     onSubmit(expense)
+    if (!isEditing) {
+      setField('title', '')
+      setField('amount', '')
+      setField('category', 'Food')
+      setField('date', toISODate(new Date()))
+      setField('note', '')
+    }
   }
 
   return (

@@ -16,6 +16,16 @@ npm run build
 npm run preview
 ```
 
+## Tests
+
+```bash
+npm test
+npm run test:ui
+npm run test:coverage
+```
+
+The test suite uses Vitest, React Testing Library, and jsdom. `npm test` starts watch mode; use `npm test -- --run` for a single run.
+
 ## Features
 
 - Add, edit, and delete expenses with typed categories and optional notes
